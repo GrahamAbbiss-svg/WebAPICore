@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Angular";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    </head>
+    <body>
+
+        @*<div ng-app="">
+            <p>Name : <input type="text" ng-model="name"></p>
+            <h1>Hello {{name}}</h1>
+        </div>*@
+
+        <div ng-app="myApp" ng-controller="myCtrl">
+
+            <p>Today's welcome message is:</p>
+            <h1>{{myWelcome}}</h1>
+
+        </div>
+        <div>
+            <input id="Add Text Box" type="button" value="button" onclick="EmployeeManagement.AddTextBox(); return false;" />
+            <br />
+            <button id="Add">Click to add textbox</button>
+            <br />
+            <button id="Remove">Click to remove textbox</button>
+        </div>
+        <div id="divCont">
+
+        </div>
+        <div id="textboxDiv">
+
+        </div>
+        <div id="ContentDiv">
+
+        </div>
+        <script>
+            var app = angular.module('myApp', []);
+            //alert('hit');
+            app.controller('myCtrl', function ($scope, $http) {
+                $http.get("/Home/AngularTest")
+                    .then(function (response) {
+                        //alert(response);
+                        $scope.myWelcome = response.data;
+                        //EmployeeManagement.variable.ContentDiv.html('');
+                        //EmployeeManagement.variable.ContentDiv.html(response);
+                    });
+            });
+
+            $(document).ready(function() {
+            $("#Add").on("click", function() {
+                $("#textboxDiv").append("<div><br><input type='text'/><br></div>");
+            });
+            $("#Remove").on("click", function() {
+                $("#textboxDiv").children().last().remove();
+            });
+        });
+        </script>
+
+        </body>
+        <script src="~/js/site.js"></script>

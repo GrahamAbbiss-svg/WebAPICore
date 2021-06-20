@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Kendo\Events.cshtml" />
+    <Content Remove="Views\Kendo\Grid.cshtml" />
+    <Content Remove="Views\Kendo\Slider.cshtml" />
+    <Content Remove="Views\Kendo\Slider1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GridMvcCore" Version="4.1.5" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+    <PackageReference Include="jsTree" Version="3.1.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BLLCore\BLLCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Kendo\" />
+  </ItemGroup>
+
+</Project>

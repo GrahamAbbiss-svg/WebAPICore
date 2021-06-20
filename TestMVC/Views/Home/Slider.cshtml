@@ -1,0 +1,136 @@
+﻿@model BO.Student
+
+<head>
+	<script src="~/lib/jquery/dist/jquery.js"></script>
+	<script src="~/appScriptsJS/app.js"></script>
+	<link href="~/css/controlssheet.css" rel="stylesheet" />
+</head>
+@using (Html.BeginForm())
+{
+	<div id="sliders">
+		<div>
+			<input id="slider1" type="range" name="slider1" min="0" max="10">
+			<input id="txt1" type="text" />
+			@Html.Hidden("SliderHider")
+			@Html.Hidden("DropDownHider")
+		</div>
+	</div>
+	<br />
+	<div id="dd">
+		@Html.DropDownList("StudentGender",
+							new SelectList(Enum.GetValues(typeof(BO.Gender))),
+							"Select Gender",
+							//new { style = "width: 250px;" })
+							new { style = "width: 250px;", @id = "promptDropDown", onchange = "categoryChosen()" })
+	</div>
+	<br />
+	<div>
+		<table>
+			<tr><td>First Name</td><td><input id="firstname" type="text" name="firstname" /></td></tr>
+			<tr><td>Middle Name</td><td><input id="middlename" type="text" name="middlename" /></td></tr>
+			<tr><td>Surname</td><td><input id="surname" type="text" name="surname" /></td></tr>
+		</table>
+	</div>
+	<br />
+	<div>
+		<input id="Submit" type="submit" value="Submit Hidden" />
+	</div>
+	<div id="divMsg"></div>
+	<br />
+	<button type="button" class="btn btn-primary btn-md" onclick="ClickMeButton()">
+		Show Message
+	</button>
+	<div id="ts-example">
+		<br />
+		<button type="button" class="btn btn-primary btn-md" onclick="TSButton()">
+			Click Me
+		</button>
+	</div>
+
+	<div id="ts-dosomething">
+		<br />
+		<button type="button" class="btn btn-primary btn-md" onclick="TypeScript()">
+			Do Something
+		</button>
+	</div>
+	@*<div id="ts-dosomethingstudent">
+		<br />
+		<button type="button" class="btn btn-primary btn-md" onclick="TypeScriptStudent()">
+			Pass Student
+		</button>
+	</div>*@
+	<div id="ts-addarray">
+		<br />
+		<button type="button" class="btn btn-primary btn-md" onclick="AddStudent()">
+			Student Add
+		</button>
+		<button type="button" class="btn btn-primary btn-md" onclick="PassStudent()">
+			Pass Student
+		</button>
+	</div>
+
+}
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		$('#slider1').change(function () {
+			var value = $(this).val();
+			$('#txt1').val(value);
+			$('#SliderHider').val(value);
+		});
+
+		$('.datepicker').datepicker();
+	});
+
+	function submit() {
+		var userWeightings = [];
+
+		$('#sliders input[type=range]').each(function (i, obj) {
+			var sliderName = $(obj).attr('name');
+			var sliderValue = $(obj).val();
+			var userWeighting = { RuleName: sliderName, Weighting: sliderValue };
+			userWeightings.push(userWeighting);
+		})
+
+		//var str = JSON.stringify(userWeightings);
+		//      alert(str);
+		//alert($('#txt1').val());
+		EmployeeManagement.onSelectSlider($('#txt1').val());
+
+	}
+
+	function categoryChosen() {
+
+		var cat = $("#promptDropDown").val();
+		//alert(cat);
+		$('#DropDownHider').val(cat);
+
+	}
+
+	function TypeScript() {
+		EmployeeManagement.JSonPost(DoSomething());
+	}
+
+	function TypeScriptStudent() {
+        EmployeeManagement.JSonPostStudent(DoStudent1());
+		document.getElementById('firstname').value = '';
+		document.getElementById('middlename').value = '';
+        document.getElementById('surname').value = '';
+        alert('Hit');
+    }
+
+	function AddStudent() {
+        DoStudent2()
+		document.getElementById('firstname').value = '';
+		document.getElementById('middlename').value = '';
+        document.getElementById('surname').value = '';
+        alert('Hit');
+    }
+
+
+	function PassStudent() {
+		EmployeeManagement.JSonPostStudent(GetStudents());
+	}
+
+</script>
+<script src="~/js/site.js"></script>

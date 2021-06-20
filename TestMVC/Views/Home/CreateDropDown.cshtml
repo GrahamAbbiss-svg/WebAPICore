@@ -1,0 +1,60 @@
+﻿@model BO.CreateUserVm
+
+@{
+    ViewData["Title"] = "CreateDropDown";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        </script>
+    </head>
+<h1>CreateDropDown</h1>
+
+<hr />
+@using (Html.BeginForm("CreateDropDown", "Home", FormMethod.Post, new { id = "formCreateDropDown" }))
+{
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="CreateDropDown">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" >
+                    <div class="input-group ">
+                        <label class="label">@Html.DisplayFor(model => model.PromptLabel)</label>
+                        @Html.DropDownListFor(model => model.SelectedLabId, new SelectList(Model.Labs, "Value", "Text"), new { @class = "form-control", @id = "promptDropDown", onchange = "categoryChosen()" })
+                        @Html.Hidden("DropDown")
+                    </div>
+                </div>
+                <div id="ContentDiv">
+                </div>
+                <div id="promptsDiv" class="vert-scroll add-padding-top">
+
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+     </div>
+}
+
+    <script type="text/javascript">
+
+        function categoryChosen() {
+            var listbox = document.getElementById("promptDropDown");
+            var selIndex = listbox.selectedIndex;
+            var selValue = listbox.options[selIndex].value;
+            var selText = listbox.options[selIndex].text;
+            $('#DropDown').val(selText);
+            EmployeeManagement.displayNextDDL(selValue + "," + selText);
+        }
+
+        function RemoveTextBox(div) {
+            document.getElementById("promptsDiv").removeChild(div.parentNode.parentNode);
+        }
+       
+    </script>
+    <script src="~/js/site.js"></script>
+    <link href="~/css/controlssheet.css" rel="stylesheet" />
+

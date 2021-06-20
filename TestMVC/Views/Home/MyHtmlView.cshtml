@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Dynamic HTML";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="~/css/tabs.css" rel="stylesheet" />
+</head>
+<body>
+    @using (Html.BeginForm("MyHtmlView", "Home", FormMethod.Post, new { id = "formMyHtmlView" }))
+    {
+
+        <div id="ContentDiv">
+
+        </div>
+    }
+    <br />
+    <div id="divLoader" style="display:none;" class="img-container">
+        <img src="~/Content/hourglass.gif" alt="Loader" width="70" height="80"/>
+        @Html.Label("Files", "Files are being processed")
+    </div>
+    <br />
+    @*<div class="tabs">
+        <div class="tab-nav-wrapper">
+            <ul>
+                <li class="active"><a href="#tab1">Corporation Details</a></li>
+                <li><a href="#tab2">Contact Information</a></li>
+                <li><a href="#tab3">Documents</a></li>
+            </ul>
+        </div>
+        <div class="tab-content-wrapper">
+            <div id="tab1" class="tab-content" style="display:none;">
+                Content 1
+            </div>
+            <div id="tab2" class="tab-content" style="display:none;">
+                Content 2
+            </div>
+            <div id="tab3" class="tab-content" style="display:none;">
+                Content 3
+            </div>
+        </div>
+    </div>*@
+    <br />
+    @*<div>
+            <button onclick="myFunction(); return false;">Spinner</button>
+        </div>*@
+    <div>
+        <button onclick="showLoading(); return false;">Show</button>
+    </div>
+    <br />
+    <div>
+        <button onclick="hideLoading(); return false;">Hide</button>
+    </div>
+</body>
+<script src="~/js/site.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //showLoading();
+        EmployeeManagement.htmlSelect();
+        //showLoading();
+        $(".tab-nav-wrapper li.active").click();
+        $($(".tab-nav-wrapper li.active a").attr("href")).show();
+
+        $(".tab-nav-wrapper li").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        $(".tab-nav-wrapper li").removeClass("active");
+        $(this).addClass("active");
+
+        var target = $(this).find("a").attr("href");
+        $(".tab-content-wrapper").find(".tab-content").hide();
+        $(".tab-content-wrapper").find(target).show();
+  })
+    });
+
+     function hideLoading() {
+        document.getElementById('divLoader').style.display = "none"; 
+    }
+    function showLoading() {
+        document.getElementById('divLoader').style.display = "block"; 
+    }
+    function myFunction() {
+        var x = document.getElementById("divLoader");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+            x.style.display = "none";
+            }
+     }
+
+</script>

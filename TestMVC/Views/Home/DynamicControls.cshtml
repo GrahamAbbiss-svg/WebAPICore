@@ -1,0 +1,15 @@
+﻿
+@model TestMVC.Models.HomeModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.EditorFor(model => model.ControlList, "CustomControl")
+
+    <input type="submit" name="name" value="Submit" />
+}
+

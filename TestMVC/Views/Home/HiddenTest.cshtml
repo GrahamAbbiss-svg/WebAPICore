@@ -1,0 +1,33 @@
+﻿
+
+@model BO.UserModel
+
+<h1>Html.Hidden Example</h1>
+
+@using (Html.BeginForm())
+{
+    //Basic Hidden Field
+    @Html.Hidden("BasicHiddenName", "Steven Clark")
+
+    //Strongly Typed Hidden Field
+    @Html.HiddenFor(m => m.UserId, new { Value = "1" })
+    <br />
+    @Html.HiddenFor(m => m.UserName, new { Value = "Steven Clark" })
+
+    <input id="Submit" type="submit" value="submit" />
+}
+
+<hr />
+<h4>Html.Hidden - Basic Type</h4>
+<p><strong>Value:</strong> @ViewBag.basicname</p>
+<br />
+
+<h4>Html.HiddenFor - Strongly Type</h4>
+
+<p><strong>ID:</strong> @ViewBag.id</p>
+<p><strong>Name:</strong> @ViewBag.name</p>
+
+
+
+
+

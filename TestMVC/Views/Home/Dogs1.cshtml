@@ -1,0 +1,16 @@
+﻿@model IEnumerable<BO.SuperDogs>
+
+@using GridMvc;
+@{
+    Layout = null;
+}
+
+<div style="width:500px;">
+    @Html.Grid(Model).Columns(columns =>
+                {
+                    columns.Add(c => c.DogName).Titled("Dog Name");
+                    columns.Add(c => c.BreedName).Titled("Breed").Filterable(true);
+                    columns.Add(c => c.DogAge).Titled("Age");
+                    columns.Add(c => c.DogOwner).Titled("Owner Name");
+                }).WithPaging(3).Sortable(true)
+</div>

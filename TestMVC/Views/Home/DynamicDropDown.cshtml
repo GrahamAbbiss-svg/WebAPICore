@@ -1,0 +1,44 @@
+﻿
+@model BO.CreateUserVm
+
+    
+    <div class="form-group" id=@Model.DivId>
+        <div class="input-group ">
+            <label class="label">@Html.DisplayFor(model => model.PromptLabel)</label>
+            @Html.DropDownListFor(model => model.SelectedLabId, new SelectList(Model.Labs, "Value", "Text"), new { @class = "form-control", @id = Model.BookingTypeId, onchange = "categoryChosen( " + Model.BookingTypeId + ")" })
+        </div>
+            @Html.HiddenFor(m => m.BookingValue)
+            @Html.Hidden("color" + @Model.BookingTypeId, @Model.BookingValue)
+            @Html.Hidden("Value", @Model.BookingTypeId)
+        </div>
+        <script type="text/javascript">
+
+            function categoryChosen(id) {
+
+            var listbox = document.getElementById(id);
+            var selIndex = listbox.selectedIndex;
+            var selValue = listbox.options[selIndex].value;
+            var selText = listbox.options[selIndex].text;
+            document.getElementById("color" + id).value = selText;
+
+            if (id != "4") {
+                EmployeeManagement.displayNextDDL1(selValue + "," + selText, id);
+            }
+        }
+
+        function categoryChosen1() {
+            var listbox = document.getElementById(@Model.BookingTypeId);
+            var selIndex = listbox.selectedIndex;
+            var selValue = listbox.options[selIndex].value;
+            var selText = listbox.options[selIndex].text;
+            document.getElementById("color" + @Model.BookingTypeId).value = selText;
+            EmployeeManagement.displayNextDDL1(selValue + "," + selText);
+        }
+
+        function RemoveTextBox(div) {
+            document.getElementById("divCont").removeChild(div.parentNode.parentNode);
+        }
+        </script>
+
+        <script src="~/js/site.js"></script>
+

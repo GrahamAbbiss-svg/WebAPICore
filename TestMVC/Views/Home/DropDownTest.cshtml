@@ -1,0 +1,18 @@
+﻿@model DropTest
+@{
+    ViewData["Title"] = "DropDownTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="main">
+    @Html.DropDownListFor(model => model.Id, new SelectList(Model.ListData))
+</div>
+<script>
+ $().ready(function(){
+   $("#main").on("change","#"+"@Model.Id",function(){
+      alert("changed");
+      $("#main").append("<input type='textbox' id='id' value=''/>");
+   });
+});
+</script>
+

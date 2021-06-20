@@ -1,0 +1,41 @@
+﻿@model List<TestMVC.Models.ControlInfo>
+<table>
+    @{ var index = -1;}
+    @foreach (TestMVC.Models.ControlInfo ControlInfo in Model)
+    {
+        index++;
+        <tr>
+            <td>@ControlInfo.ControlLabel</td>
+            <td>
+                <input type="hidden" name="@("ControlList[" + index + "].ControlID")" value="@ControlInfo.ControlID" />
+                <input type="hidden" name="@("ControlList[" + index + "].ControlLabel")" value="@ControlInfo.ControlLabel" />
+                <input type="hidden" name="@("ControlList[" + index + "].ControlName")" value="@ControlInfo.ControlName" />
+                <input type="hidden" name="@("ControlList[" + index + "].ControlType")" value="@ControlInfo.ControlType" />
+
+                @switch (ControlInfo.ControlType.ToLower())
+                {
+                    case "textbox":
+
+                        <input type="text" name="@("ControlList["+index+"].ControlValue")" id="@ControlInfo.ControlID" value="@ControlInfo.ControlValue" />
+                        break;
+                    case "checkbox":
+                        <input type="hidden" name="@("ControlList[" + index + "].ControlValue")" value="@ControlInfo.ControlValue" />
+                        if (ControlInfo.IsChecked)
+                        {
+                            <input type="checkbox" name="@("ControlList[" + index + "].IsChecked")" id="@ControlInfo.ControlID" value="true" checked="checked" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="@("ControlList[" + index + "].IsChecked")" id="@ControlInfo.ControlID" value="true" />
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+            </td>
+
+        </tr>
+    }
+
+</table>

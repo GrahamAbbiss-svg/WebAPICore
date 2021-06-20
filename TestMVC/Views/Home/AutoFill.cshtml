@@ -1,0 +1,78 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery UI Autocomplete functionality</title>
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <!-- Javascript -->
+    <style>
+        #draggable {
+            width: 150px;
+            height: 150px;
+            padding: 0.5em;
+        }
+    </style>
+    <script>
+          function MessageEnd() {
+            document.getElementById("divMsgEnd").innerHTML = 'I have been dragged here !!!!';
+        }
+
+         function MessageStart() {
+            document.getElementById("divMsgStart").innerHTML = 'I am about to be dragged !!!!';
+          }
+
+        $(function () {
+            $("#draggable").draggable();
+        });
+
+        $(function () {
+            var availableTutorials = [
+                "ActionScript",
+                "Bootstrap",
+                "C",
+                "C++",
+                "Ecommerce",
+                "Jquery",
+                "Groovy",
+                "Java",
+                "JavaScript",
+                "Lua",
+                "Perl",
+                "Ruby",
+                "Scala",
+                "Swing",
+                "XHTML"
+            ];
+            $("#automplete-6").autocomplete({
+                source: availableTutorials
+            });
+            $("#automplete-6").autocomplete("option", "position",
+                { my: "right-10 top+10", at: "right top" })
+        });
+    </script>
+</head>
+<body>
+    <div class="ui-widget">
+        <p>Type "a" or "s"</p>
+        <label for="automplete-6">Tags: </label>
+        <input id="automplete-6">
+    </div>
+    <div id="draggable" class="ui-widget-content" ondragstart="MessageStart()" >
+        <p>Drag me around</p>
+    </div>
+    <div id="divMsgStart">
+
+    </div>
+    <div id="divMsgEnd">
+
+    </div>
+</body>
+</html>

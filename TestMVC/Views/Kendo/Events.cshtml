@@ -1,0 +1,101 @@
+﻿
+
+@model List<WebAPI.Models.Employee>
+@using Kendo.Mvc.UI;
+
+    <head>
+        <link href="~/css/controlssheet.css" rel="stylesheet" />
+        <link href="https://kendo.cdn.telerik.com/2020.2.617/styles/kendo.bootstrap-v4.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://kendo.cdn.telerik.com/2020.2.617/js/jquery.min.js"></script>
+        <script src="https://kendo.cdn.telerik.com/2020.2.617/js/kendo.all.min.js"></script>
+        <script src="https://kendo.cdn.telerik.com/2020.2.617/js/kendo.aspnetmvc.min.js"></script>
+    </head>
+@*<div class="demo-section k-content">
+    @(Html.Kendo().TreeView()
+                .Name("treeview")
+                .Checkboxes(true)
+                .DragAndDrop(true)
+                
+                .Items(treeview =>
+                {
+                    treeview.Add().Text("My Web Site")
+                        .SpriteCssClasses("folder")
+                        .Expanded(true)
+                        .Items(root =>
+                        {
+                            root.Add().Text("images")
+                                .Expanded(true)
+                                .SpriteCssClasses("folder")
+                                .Items(images =>
+                                {
+                                    images.Add().Text("logo.png")
+                                        .SpriteCssClasses("image");
+
+                                    images.Add().Text("body-back.png")
+                                        .SpriteCssClasses("image");
+
+                                    images.Add().Text("my-photo.jpg")
+                                        .SpriteCssClasses("image");
+                                });
+
+                            root.Add().Text("resources")
+                                .Expanded(true)
+                                .SpriteCssClasses("folder")
+                                .Items(resources =>
+                                {
+                                    resources.Add().Text("pdf")
+                                        .Expanded(true)
+                                        .SpriteCssClasses("folder")
+                                        .Items(pdf =>
+                                        {
+                                            pdf.Add().Text("brochure.pdf")
+                                                .SpriteCssClasses("pdf");
+
+                                            pdf.Add().Text("prices.pdf")
+                                                .SpriteCssClasses("pdf");
+                                        });
+
+                                    resources.Add().Text("zip")
+                                        .SpriteCssClasses("folder");
+                                });
+
+                            root.Add().Text("about.html")
+                                .SpriteCssClasses("html");
+
+                            root.Add().Text("contacts.html")
+                                .SpriteCssClasses("html");
+
+                            root.Add().Text("index.html")
+                                .SpriteCssClasses("html");
+
+                            root.Add().Text("portfolio.html")
+                                .SpriteCssClasses("html");
+                        });
+                })
+    )
+</div>*@
+
+<div class="demo-section k-content">
+    @(Html.Kendo().TreeView()
+        .Name("treeview")
+        .DataTextField("Name")
+        .DataSource(dataSource => dataSource
+            .Read(read => read
+                .Action("GetEmployees", "Kendo")
+            )
+        )
+    )
+</div>
+
+<style>
+    #treeview .k-sprite {
+        background-image: url("@Url.Content("~/Content/web/treeview/coloricons-sprite.png")");
+    }
+
+    .rootfolder { background-position: 0 0; }
+    .folder { background-position: 0 -16px; }
+    .pdf { background-position: 0 -32px; }
+    .html { background-position: 0 -48px; }
+    .image { background-position: 0 -64px; }
+</style>
+

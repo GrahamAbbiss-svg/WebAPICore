@@ -1,0 +1,33 @@
+﻿@model IEnumerable<BO.SuperDogs>
+
+@using GridMvc;
+@{
+    ViewData["Title"] = "Dogs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+    <title>Dog List</title>
+</head>
+<body>
+    <h1>Dog List</h1>
+    <hr />
+    <div style="width:500px;">
+        @Html.Grid(Model).Columns(columns =>
+                    {
+                        columns.Add(c => c.DogName).Titled("Dog Name").Width = "150px";
+                        columns.Add(c => c.BreedName).Titled("Breed").Filterable(true).Width = "150px";
+                        columns.Add(c => c.DogAge).Titled("Age");
+                        columns.Add(c => c.DogOwner).Titled("Owner Name");
+                    }
+                    ).WithPaging(8).Sortable(true).Selectable(true)
+
+    </div>
+</body>
+</html>
