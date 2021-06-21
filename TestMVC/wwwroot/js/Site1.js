@@ -1,5 +1,9 @@
 ﻿var EmployeeManagement = {
+
+
+
     variable: {
+
         //caseListContentgrid: $("#CaseListContent").data("kendoGrid"),
         //previewerDiv: $("#previewerDiv"),
         //pdfViewer: $("#pdfViewer"),
@@ -15,10 +19,12 @@
         promptsDiv: $("#promptsDiv"),
         //caseDetailsTabControl: $("#CaseDetailsTabstrip").data("kendoTabStrip")
         contacts: $("#contacts"),
-
     },
 
+
+
     url: {
+
         mycityUrl: document.location.protocol + "//" + document.location.host + "/Home/City",
         AddNoteUrl: document.location.protocol + "//" + document.location.host + "/Home/CaseNoteDetails",
         CategoryUrl: document.location.protocol + "//" + document.location.host + "/Home/CategoryChosen",
@@ -31,10 +37,9 @@
         Cache: document.location.protocol + "//" + document.location.host + "/Home/UpdateCache",
         Json: document.location.protocol + "//" + document.location.host + "/Home/JSonPost",
         JsonStudent: document.location.protocol + "//" + document.location.host + "/Home/JSonStudent",
-        
-
 
     },
+
     promptSelect: function (SelectedLabId) {
         $.ajax({
             type: 'GET',
@@ -58,7 +63,7 @@
             //data: 'node=' + values,
             data: 'node=' + JSON.stringify(values),
             success: function (result) {
-               
+
             }
         });
     },
@@ -76,8 +81,10 @@
             }
         });
     },
+
+    
     updateCache: function (Id) {
-        
+
         $.ajax({
             type: 'GET',
             cache: false,
@@ -85,12 +92,12 @@
             url: EmployeeManagement.url.Cache,
             data: 'Id=' + Id,
             success: function (result) {
-               
+
             }
         });
     },
     GetContact: function () {
-        
+
         $.ajax({
             url: EmployeeManagement.url.Contact,
             type: "GET",
@@ -102,19 +109,19 @@
                 var obj = JSON.parse(data);
                 var row = "";
                 //alert(obj.Id[0]);
-                
+
                 //row += "<tr><td><input type='checkbox'id='" + obj[0].Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + obj[0].Name + "</td><td>" + obj[0].MobileNumber + "</td></tr>";
                 //row += "<tr><td><input type='checkbox'id='" + obj[1].Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + obj[1].Name + "</td><td>" + obj[1].MobileNumber + "</td></tr>";
                 //row += "<tr><td><input type='checkbox'id='" + obj[2].Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + obj[2].Name + "</td><td>" + obj[2].MobileNumber + "</td></tr>";
                 //$.each(data, function (index, item) {
-                    
-                    //row += "<tr><td><input type='checkbox'id='" + item.Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + item.Name + "</td><td>" + item.MobileNumber + "</td></tr>";
+
+                //row += "<tr><td><input type='checkbox'id='" + item.Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + item.Name + "</td><td>" + item.MobileNumber + "</td></tr>";
                 //});
                 //alert(row);
 
                 for (x in obj) {
                     row += "<tr><td><input type='checkbox'id='" + obj[x].Id + "' name='chooseRecipient' class='my_chkBox' /></td><td>" + obj[x].Name + "</td><td>" + obj[x].MobileNumber + "</td></tr>";
-                     
+
                 }
                 $(EmployeeManagement.variable.contacts).html(row);
             },
@@ -122,16 +129,14 @@
                 alert("Error");
             }
         });
-},
-
-
+    },
     htmlSelect: function () {
         $.ajax({
             type: 'GET',
             cache: false,
             async: true,
             url: EmployeeManagement.url.GetHTML,
-            
+
             success: function (result) {
                 EmployeeManagement.variable.ContentDiv.html('');
                 EmployeeManagement.variable.ContentDiv.html(result);
@@ -139,8 +144,8 @@
         });
     },
     onSelectCity: function (e) {
-       
-        CityID =e;
+
+        CityID = e;
         $.ajax({
             type: 'GET',
             cache: false,
@@ -162,61 +167,43 @@
             url: EmployeeManagement.url.Slider,
             data: 'Value=' + e,
             success: function (result) {
-               
+
             }
         });
     },
 
-  
+    AddTextBox: function () {
 
-    AddTextBox : function() {
-        
-    var div = document.createElement('DIV');
+        var div = document.createElement('DIV');
 
         div.innerHTML = '<div><input type="text" name="txttest" style="width:200px;" /><input type="button" onclick="EmployeeManagement.RemoveTextBox(this)" value="Remove" /></div>';
 
-    document.getElementById("divCont").appendChild(div);
+        document.getElementById("divCont").appendChild(div);
 
     },
 
     RemoveTextBox: function (div) {
-      
+
         document.getElementById("divCont").removeChild(div.parentNode);
-       },
-
-
-    //displayNextDDL: function () {
-    //    $.ajax({
-    //        type: "GET",
-    //        cache: false,
-    //        async: true,
-    //        url: EmployeeManagement.url.DynamicUrl,
-    //        //data: "BookingTypeId=" + bookingTypeId + "&PromptId=" + promptId + "&OwnerPromptId=" + ownerPromptId + "&ChoiceId=" + choiceId,
-    //        success: function (result) {
-               
-    //            EmployeeManagement.variable.promptsDiv.append(result);
-               
-    //        }
-    //    });
-    //},
+    },
     displayNextDDL: function (e) {
         $.ajax({
             type: "GET",
             cache: false,
             async: true,
             url: EmployeeManagement.url.DynamicUrl,
-            data: "BookingTypeId=" + e, 
+            data: "BookingTypeId=" + e,
             //data: "BookingTypeId=" + bookingTypeId + "&PromptId=" + promptId + "&OwnerPromptId=" + ownerPromptId + "&ChoiceId=" + choiceId,
             success: function (result) {
-                
+
                 EmployeeManagement.variable.promptsDiv.append(result);
 
             }
         });
     },
 
-    displayNextDDL1: function (e,id) {
-    
+    displayNextDDL1: function (e, id) {
+
         $.ajax({
             type: "GET",
             cache: false,
@@ -232,16 +219,16 @@
                         if (i != 2) {
                             $("#DynamicDiv" + i).remove();
                         }
-  
+
                     }
 
                     EmployeeManagement.updateCache(id);
                     EmployeeManagement.displayNextDDLUpdate(id);
-                   
+
                 }
                 else {
                     EmployeeManagement.variable.promptsDiv.append(result);
-                    
+
                 }
 
             }
@@ -258,18 +245,19 @@
             cache: false,
             async: true,
             url: EmployeeManagement.url.DynamicUrl1,
-            data: "BookingTypeId=" + e, 
+            data: "BookingTypeId=" + e,
             success: function (result) {
-                    EmployeeManagement.variable.promptsDiv.append(result);
-                         
+                EmployeeManagement.variable.promptsDiv.append(result);
+
             }
-            
+
         });
 
     },
+
     displayNoteWindow: function (e) {
 
-        var FileUrl = EmployeeManagement.url.AddNoteUrl+ "?CityId=" + e;
+        var FileUrl = EmployeeManagement.url.mycityUrl+ "?CityId=" + e;
 
         EmployeeManagement.variable.addNotesWindowContent.load(FileUrl, function () {
             EmployeeManagement.variable.addNotesWindow.modal({
@@ -310,3 +298,4 @@
 
     },
 }
+
