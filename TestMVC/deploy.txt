@@ -1,0 +1,7 @@
+AspNetCoreModuleV2
+
+https://www.c-sharpcorner.com/article/how-to-deploy-asp-net-mvc-4-application-on-local-iis/
+
+https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-aspnetcore-2.2.2-windows-hosting-bundle-installer
+
+https://www.c-sharpcorner.com/article/authentication-and-authorization-in-asp-net-core-web-api-with-json-web-tokens/

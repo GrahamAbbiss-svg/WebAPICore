@@ -68,5 +68,19 @@ namespace BLL.WebServices
             var response = await caseFile.GetFile().ConfigureAwait(false);
             return response;
         }
+
+        public async Task<IEnumerable<WeatherForecast>> GetWeather(string token)
+        {
+            var caseFile = _employeewebrequestClientFactory.Create();
+            var response = await caseFile.GetWeather(token).ConfigureAwait(false);
+            return response;
+        }
+
+        public async Task<Result<LoginClient>> LoginClient(LoginModel login)
+        {
+            var caseFile = _employeewebrequestClientFactory.Create();
+            var response = await caseFile.LoginClient(login).ConfigureAwait(false);
+            return response;
+        }
     }
 }

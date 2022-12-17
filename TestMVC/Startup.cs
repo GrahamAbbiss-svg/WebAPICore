@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestMVC.AutoMapper;
+using TestMVC.Filters;
+using TestMVC.Services;
 using WebAPI.Core.Common;
 
 namespace TestMVC
@@ -29,7 +31,9 @@ namespace TestMVC
         {
             //IoC.Initialise(services, Configuration.GetValue<string>(GetWebServiceNameAWS()));
             IoC.Initialise(services, Configuration.GetValue<string>(GetWebServiceName()));
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddControllersWithViews();
+           
             //services.AddKendo();
             services.AddAuthentication("CookieAuthentication")
                  .AddCookie("CookieAuthentication", config =>
@@ -40,8 +44,11 @@ namespace TestMVC
 
             services.AddControllersWithViews();
             //services.AddScoped<LogAttribute>();
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<WebAPI.Core.Common.AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddSingleton(AutoMapperConfig.CreateMapperConfig());
+            services.AddScoped<IDapper, Dapperr>();
+            services.AddSession();
+            services.AddScoped<CustomActionFilter>();
 
 
         }
@@ -63,6 +70,7 @@ namespace TestMVC
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -82,7 +90,8 @@ namespace TestMVC
         {
             string webservice = "";
 
-            webservice = "AppSettings:CivicaCoreWebService";
+            //webservice = "AppSettings:CivicaCoreWebService";
+            webservice = "AppSettings:CivicaCoreWebServiceSecure";
 
             return webservice;
         }

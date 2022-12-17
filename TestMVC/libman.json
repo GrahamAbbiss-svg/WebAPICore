@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jqueryui@1.12.1",
+      "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "dropzone@5.9.3",
+      "destination": "wwwroot/dropzone/",
+      "files": [
+        "dropzone.min.js",
+        "basic.css",
+        "dropzone.css",
+        "dropzone.js",
+        "dropzone-amd-module.js"
+      ]
+    }
+  ]
+}

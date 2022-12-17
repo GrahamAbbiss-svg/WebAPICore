@@ -20,7 +20,7 @@ namespace TestMVC
             cookie.Options = new CookieOptions();
             cookie.Options.Expires = DateTime.Now.AddDays(1);
             cookie.Options.HttpOnly = true;
-            cookie.Options.Secure = true;
+            //cookie.Options.Secure = true;
             cookie.Options.SameSite = SameSiteMode.Strict;
 
             return cookie;

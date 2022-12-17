@@ -25,5 +25,8 @@ namespace APIRequestsCore.WebRequestInterface
 
         Task<string> Employees();
 
+        Task<IEnumerable<WeatherForecast>> GetWeather(string token);
+        Task<Result<LoginClient>> LoginClient(LoginModel login);
+
     }
 }

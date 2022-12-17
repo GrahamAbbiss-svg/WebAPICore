@@ -37,6 +37,19 @@ namespace APIRequests.WebRequests
             return new string(Constants.CaseRepoPath + "/" + MethodName + args);
 
         }
+        private static HttpRequestMessage CreateRequestSecure(string args = "", [CallerMemberName] string MethodName = "")
+        {
+            return new HttpRequestMessage(HttpMethod.Get, Constants.CaseRepoPathAuth + "/" + MethodName + args);
+        }
+        private static string CreateURISecure(string args, [CallerMemberName] string MethodName = "")
+        {
+            return new string("api" + "/" + Constants.CaseRepoPathAuth + "/" + MethodName + args);
+        }
+
+        private static HttpRequestMessage CreateRequestSecureA(string args = "")
+        {
+            return new HttpRequestMessage(HttpMethod.Get, args);
+        }
 
         public async Task<bool> AddDocument(string Document,string Filetype)
         {
@@ -165,6 +178,47 @@ namespace APIRequests.WebRequests
             catch
             {
                 throw;
+            }
+        }
+
+        public async Task<IEnumerable<WeatherForecast>> GetWeather(string token)
+        {
+            try
+            {
+                var request = CreateRequestSecureA("WeatherForecast");
+                //request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiU2FyYXRobGFsIiwianRpIjoiZGEzMmFjMzItZWQ0MS00ZmVlLWJkY2YtMWE4NjNlMWY3ZTA1IiwiZXhwIjoxNjU0MDAxMDM1LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjYxOTU1IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo0MjAwIn0.xpspfVHDrh0P84WLUsJ2R5wSXMFHtccrJ7zblB2Y7Y8");
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var result = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+                using (var contentStream = await result.Content.ReadAsStreamAsync())
+                {
+                    return await JsonSerializer.DeserializeAsync<IEnumerable<WeatherForecast>>(contentStream, DefaultJsonSerializerOptions.Options);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<Result<LoginClient>> LoginClient(LoginModel login)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(login);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var request = CreateURISecure("/");
+
+                var result = await _httpClient.PostAsync(request, content).ConfigureAwait(false);
+
+                using (var contentStream = await result.Content.ReadAsStreamAsync())
+                {
+                    return await JsonSerializer.DeserializeAsync<Result<LoginClient>>(contentStream, DefaultJsonSerializerOptions.Options);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

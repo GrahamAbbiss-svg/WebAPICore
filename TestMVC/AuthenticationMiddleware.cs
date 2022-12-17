@@ -17,52 +17,79 @@ namespace TestMVC
     public class AuthenticationMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly AppSettings _appSettings;
+        private readonly WebAPI.Core.Common.AppSettings _appSettings;
 
-        public AuthenticationMiddleware(RequestDelegate next, IOptions<AppSettings> optionsAccessor)
+        public AuthenticationMiddleware(RequestDelegate next, IOptions<WebAPI.Core.Common.AppSettings> optionsAccessor)
         {
             _next = next;
             _appSettings = optionsAccessor.Value;
             
         }
 
+        //public async Task Invoke(HttpContext context)
+        //{
+        //    try
+        //    {
+        //        UserVm user=new UserVm();
+        //        //_appSettings.UserCookieName = "test";
+        //        string cookieValue = context.Request.Cookies[_appSettings.UserCookieName];
+
+        //        if (cookieValue == null)
+        //        {
+        //            // Get the anonymous user and configuration details
+        //            var resUser = GetAnonymousUser();
+        //            var mapper = (IMapper)context.RequestServices.GetService(typeof(IMapper));
+
+        //            user = mapper.Map<UserVm>(resUser);
+        //            // Generate a random login id for an anonymous user
+        //            //user.LoginID = Guid.NewGuid().ToString();
+        //            // Save the user details as a cookie
+        //            var cookie = Authorisation.BuildUserCookie(user, _appSettings.UserCookieName);
+        //            context.Response.Cookies.Append(cookie.Name, cookie.Value, cookie.Options);
+        //        }
+        //        else
+        //        {
+        //            user = JsonSerializer.Deserialize<UserVm>(cookieValue);
+        //        }
+
+        //        // Assign the user to the http user principal
+        //        context.User = user;
+
+        //        await _next.Invoke(context);
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+
         public async Task Invoke(HttpContext context)
         {
             try
             {
-                UserVm user=new UserVm();
-                //_appSettings.UserCookieName = "test";
+                //UserVm user;
                 string cookieValue = context.Request.Cookies[_appSettings.UserCookieName];
-
-                if (cookieValue == null)
+               // DeleteCookies(context);
+                
+                if (cookieValue != null)
                 {
-                    // Get the anonymous user and configuration details
-                    var resUser = GetAnonymousUser();
-                    var mapper = (IMapper)context.RequestServices.GetService(typeof(IMapper));
-
-                    user = mapper.Map<UserVm>(resUser);
-                    // Generate a random login id for an anonymous user
-                    //user.LoginID = Guid.NewGuid().ToString();
-                    // Save the user details as a cookie
-                    var cookie = Authorisation.BuildUserCookie(user, _appSettings.UserCookieName);
-                    context.Response.Cookies.Append(cookie.Name, cookie.Value, cookie.Options);
+                    context.User = JsonSerializer.Deserialize<UserVm>(cookieValue);
                 }
-                else
-                {
-                    user = JsonSerializer.Deserialize<UserVm>(cookieValue);
-                }
-
-                // Assign the user to the http user principal
-                context.User = user;
 
                 await _next.Invoke(context);
             }
-            catch
+            catch (Exception e)
             {
-                throw;
             }
         }
 
+        private void DeleteCookies(HttpContext context)
+        {
+            foreach (var cookie in context.Request.Cookies)
+            {
+                context.Response.Cookies.Delete(cookie.Key);
+            }
+        }
         private UserBo GetAnonymousUser()
         {
             UserBo userBo = new UserBo();

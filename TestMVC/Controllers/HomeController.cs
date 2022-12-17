@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -18,6 +19,12 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using TestMVC.Services;
+using TestMVC.DapperCalls;
+using Microsoft.Extensions.Options;
+using Civica.Core.BO;
+using TestMVC.AutoMapper;
+using TestMVC.Filters;
 //using System.Web.Mvc;
 
 namespace TestMVC.Controllers
@@ -30,13 +37,18 @@ namespace TestMVC.Controllers
         private MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                 // Keep in cache for this time, reset time if accessed.
                 .SetSlidingExpiration(TimeSpan.FromSeconds(6000));
-        public HomeController(IEmployeeService employeeService, IMemoryCache memoryCache)
+
+        private readonly IDapper _dapper;
+        private readonly AppSettings _appSettings;
+        public HomeController(IEmployeeService employeeService, IMemoryCache memoryCache,IDapper dapper, IOptions<AppSettings> optionsAccessor)
         {
             _employeeService = employeeService;
             _cache = memoryCache;
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
                     .SetSlidingExpiration(TimeSpan.FromSeconds(6000));
+            _dapper = dapper;
+            _appSettings = optionsAccessor.Value;
 
         }
         [HttpPost]
@@ -44,6 +56,80 @@ namespace TestMVC.Controllers
         {
             var model = JsonConvert.DeserializeObject<List<Students>>(node);
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Login()
+        {
+            UserDetails userDetails = new UserDetails();
+            return PartialView("~/Views/Home/LoginModal.cshtml", userDetails);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(UserDetails model)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                UserLogin user = new UserLogin();
+                DapperDatabaseCalls databaseCalls = new DapperDatabaseCalls(_dapper);
+                user = await databaseCalls.GetUser(model.UserId, model.Password);
+
+                if (user != null)
+                {
+                    string cookieValue = Request.Cookies[_appSettings.UserCookieName];
+
+                    if (cookieValue == null)
+                    {
+                        UserVm vm = new UserVm();
+                        var resUser = GetAnonymousUser(true);
+                        AutoMapperConfig.CreateMapperConfig();
+                        AutoMapperConfig.CopyObject(resUser, ref vm);
+                        vm.RoleId = user.RoleId;
+                        var cookie = Authorisation.BuildUserCookie(vm, _appSettings.UserCookieName);
+
+                        Response.Cookies.Append(cookie.Name, cookie.Value, cookie.Options);
+
+                    }
+
+                    return Json(new { success = true });
+                    //return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    //Error handling not working so using JSON instaed
+                    //ModelState.AddModelError("Invalid User Name or Password", "Invalid User Name or Password");
+                    ////return PartialView("~/Views/Home/LoginModal.cshtml", model);
+                    //return new EmptyResult();
+                    return Json(new { success = false });
+                }
+
+            }
+            else
+            {
+                //Error handling not working so using JSON instaed
+                //ModelState.AddModelError("Invalid User Name or Password", "Invalid User Name or Password");
+                ////return PartialView("~/Views/Home/LoginModal.cshtml", model);
+                //return new EmptyResult();
+                return Json(new { success = false });
+            }
+        }
+        [HttpGet]
+        public ActionResult CheckLogin()
+        {
+
+            string cookieValue = Request.Cookies[_appSettings.UserCookieName];
+
+            if (cookieValue == null)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+
         }
 
         [HttpGet]
@@ -78,8 +164,23 @@ namespace TestMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEmployee()
         {
-            List<Employee> employees = new List<Employee>();
-            employees = await _employeeService.GetEmployee().ConfigureAwait(false);
+            var cacheKey = "employeeList";
+            //checks if cache entries exists
+            if (!_cache.TryGetValue(cacheKey, out List<Employee> employees))
+            {
+                //List<Employee> employees = new List<Employee>();
+                employees = await _employeeService.GetEmployee().ConfigureAwait(false);
+
+                var cacheExpiryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddSeconds(3000),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromSeconds(3000)
+                };
+                //setting cache entries
+                _cache.Set(cacheKey, employees, cacheExpiryOptions);
+            }
+
             return View("~/Views/Home/Employee.cshtml", employees);
         }
         [HttpGet]
@@ -451,29 +552,151 @@ namespace TestMVC.Controllers
             }
             
         }
-
         [HttpGet]
         public ActionResult Download(string id)
         {
             var documentByte = new byte[] { };
-            CaseFileBo caseFileBo = new CaseFileBo();
+            //Result<CaseFileBo> caseFileBo = new Result<CaseFileBo>();
+            Result<CaseFileBo> caseFileBo = new Result<CaseFileBo>();
+            CaseFileVm caseFileVm = new CaseFileVm();
+            UserVm vm = new UserVm();
+            vm = (UserVm)HttpContext.User;
+            caseFileBo = CaseLogic.GetFile(Int32.Parse(id), User.LoginID);
 
-            caseFileBo = _employeeService.GetFile().Result;
-            
+            //caseFileVm = _mapper.Map<CaseFileVm>(caseFileBo.Data);
+
+            AutoMapperConfig.CreateMapperConfig();
+            AutoMapperConfig.CopyObject(caseFileBo.Data, ref caseFileVm);
             var fileName = string.Empty;
 
-           
-                if (caseFileBo.FileData != null)
+            if (caseFileBo.IsSuccess && caseFileBo.Data != null)
+            {
+                if (caseFileBo.Data != null)
                 {
-                    documentByte = caseFileBo.FileData;
-                    fileName = caseFileBo.FileName;
+
+                    documentByte = caseFileVm.FileData;
+                    fileName = caseFileVm.FileName;
                 }
-            
+            }
 
             return File(documentByte, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
 
         }
 
+        //[HttpGet]
+        //public ActionResult Download(string id)
+        //{
+        //    var documentByte = new byte[] { };
+        //    CaseFileBo caseFileBo = new CaseFileBo();
+
+        //    caseFileBo = _employeeService.GetFile().Result;
+
+        //    var fileName = string.Empty;
+
+
+        //        if (caseFileBo.FileData != null)
+        //        {
+        //            documentByte = caseFileBo.FileData;
+        //            fileName = caseFileBo.FileName;
+        //        }
+
+
+        //    return File(documentByte, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+
+        //}
+
+        [HttpPost]
+        public IActionResult JQueryUI(clsGetDirectActivity user, IFormCollection collection)
+        {
+            return new EmptyResult();
+        }
+
+        public IActionResult JQueryUI()
+        {
+            clsGetDirectActivity user = new clsGetDirectActivity();
+
+            List<SelectListItem> useractivity = new List<SelectListItem>();
+            List<SelectListItem> usercustomer = new List<SelectListItem>();
+            List<SelectListItem> usergovenor = new List<SelectListItem>();
+
+            ViewBag.GovernanceList = DataClass.ToSelectList(DataClass.GovernanceGroup(), "GovernanceGroupID", "GovernanceGroupName");
+
+            ViewBag.Name = "Hello World";
+
+
+            //foreach (SelectListItem activity in DataClass.ToSelectList(DataClass.DirectActivityType(), "DirectTypeID", "DirectTypeName").Items)
+            //{
+            //    SelectListItem selectList = new SelectListItem();
+            //    selectList.Text = activity.Text;
+            //    selectList.Value = int.Parse(activity.Value.ToString());
+            //    useractivity.Add(selectList);
+            //}
+
+
+            foreach (SelectListItem activity in DataClass.ToSelectList(DataClass.CustomerGroup(), "CustomerGroupID", "CustomerGroupName").Items)
+            {
+                SelectListItem selectList = new SelectListItem();
+                selectList.Text = activity.Text;
+                selectList.Value = int.Parse(activity.Value.ToString());
+                usercustomer.Add(selectList);
+            }
+
+            foreach (SelectListItem activity in DataClass.ToSelectList(DataClass.GovernanceGroup(), "GovernanceGroupID", "GovernanceGroupName").Items)
+            {
+                SelectListItem selectList = new SelectListItem();
+                selectList.Text = activity.Text;
+                selectList.Value = int.Parse(activity.Value.ToString());
+                usergovenor.Add(selectList);
+            }
+
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+
+            SelectListItem selectList1 = new SelectListItem()
+            {
+                Text = "London",
+                Value = 1
+
+            };
+            selectListItems.Add(selectList1);
+
+            SelectListItem selectList2 = new SelectListItem()
+            {
+                Text = "Birmingham",
+                Value = 2
+
+            };
+            selectListItems.Add(selectList2);
+
+
+
+            SelectListItem selectList3 = new SelectListItem()
+            {
+                Text = "Manchester",
+                Value = 3
+
+            };
+            selectListItems.Add(selectList3);
+
+
+            CitiesViewModel citiesViewModel = new CitiesViewModel()
+            { Cities = selectListItems };
+
+            user.Activities = useractivity;
+            user.Customers = usercustomer;
+            user.Governances = usergovenor;
+            user.citiesViewModel = citiesViewModel;
+
+            //return View(user);
+            return View("~/Views/Home/JQueryUI.cshtml", user);
+        }
+
+        [HttpGet]
+        public JsonResult GetDropdownList(int? value)
+        {
+            var data = DataClass.ToSelectList(DataClass.GovernaceGroups(value), "GovernanceGroupID", "GovernanceGroupName");
+            return Json(JsonConvert.SerializeObject(data.Items));
+
+        }
         public ActionResult HiddenTest()
         {
             UserModel obj = new UserModel();
@@ -574,21 +797,161 @@ namespace TestMVC.Controllers
        
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("UserRole", "Tester");
+            HttpContext.Session.SetInt32("Age", 40);
+            TempData["UserId"] = 101;
             return View();
         }
-
+        [TypeFilter(typeof(CustomAuthorizationFilterAttribute))]
         public IActionResult Privacy()
         {
             return View();
         }
-
+        [ServiceFilter(typeof(CustomActionFilter))]
         public IActionResult Dogs()
         {
             var model = new Dogs();
             List<SuperDogs> dogGrid = model.GetHardCodedValues();
-            return View(dogGrid);
+            //return View(dogGrid);
+            //return View("~/Views/Home/DogsWithEvents.cshtml", dogGrid);
+            return View("~/Views/Home/Dogs2.cshtml", dogGrid);
         }
 
+        [HttpGet]
+        public ActionResult FindDog(string dogName)
+        {
+            return new EmptyResult();
+        }
+
+        public async Task<ActionResult> DapperCalls()
+        {
+            DapperDatabaseCalls databaseCalls = new DapperDatabaseCalls(_dapper);
+            var result = await databaseCalls.GetEmployees();
+
+            return View();
+
+        }
+
+        public IActionResult AutoComplete()
+
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public IActionResult AutoComplete(string CustomerName, string CustomerId)
+
+        {
+            ViewBag.Message = "City Name: " + CustomerName + " City Id: " + CustomerId;
+            return View();
+        }
+
+        [HttpPost]
+
+        [ValidateAntiForgeryToken]
+
+        public IActionResult Complete(string Prefix)
+        {
+            List<AutoCity> ObjList = new List<AutoCity>()
+
+                {
+
+                    new AutoCity {Id=1,Name="Latur" },
+                    new AutoCity {Id=2,Name="Mumbai" },
+                    new AutoCity {Id=3,Name="Pune" },
+                    new AutoCity {Id=4,Name="Delhi" },
+                    new AutoCity {Id=5,Name="Dehradun" },
+                    new AutoCity {Id=6,Name="Noida" },
+                    new AutoCity {Id=7,Name="New Delhi" }
+            };
+
+
+            var Name = (from N in ObjList
+
+                        where N.Name.StartsWith(Prefix)
+
+                        select new { label = N.Name, val = N.Id }).ToList();
+            
+            return Json(Name);
+
+        }
+        public async Task<ActionResult> GetWeather()
+        {
+            var weather = await _employeeService.GetWeather("").ConfigureAwait(false);
+            return View("~/Views/Home/Weather.cshtml", weather);
+
+        }
+
+        public async Task<ActionResult> UserLogin()
+        {
+            LoginModel login = new LoginModel();
+            login.Username = "Reecey";
+            login.Password = "Reece@123";
+            var result = await _employeeService.LoginClient(login).ConfigureAwait(false);
+            var weather = await _employeeService.GetWeather(result.Data.token).ConfigureAwait(false);
+            return View("~/Views/Home/Weather.cshtml", weather);
+
+        }
+        public ActionResult StreamListDetails(string PcdID)
+        {
+
+            CaseNotesVm caseNotes = new CaseNotesVm();
+            caseNotes.CaseHeaderId = 1;
+            return PartialView("~/Views/Home/_CaseNoteDetails.cshtml", caseNotes);
+        }
+        [HttpGet]
+        public ActionResult SideMenu()
+        {
+            return View("~/Views/Home/SideMenu.cshtml");
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> Upload(IFormFile file)
+
+        {
+
+            var uploads = @"C:\UploadedDocs\";
+
+            if (file.Length > 0)
+
+            {
+                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+
+
+
+
+        public ActionResult DropZone()
+
+        {
+            return View("~/Views/Home/DropZone1.cshtml");
+        }
+
+        [NonAction]
+        private UserBo GetAnonymousUser(Boolean user)
+        {
+            UserBo userBo = new UserBo();
+            userBo.LoginID = Guid.NewGuid().ToString();
+            userBo.Name = "Anony";
+            return userBo;
+        }
+
+        [HttpGet]
+        public ActionResult SideBarMenu()
+        {
+            return View("~/Views/Home/SideBarMenu.cshtml");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

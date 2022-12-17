@@ -24,6 +24,10 @@ namespace APIRequestsCore.WebRequestInterface
         Task<Result<bool>> AddFiles(List<CaseFileBo> files);
         Task<string> Employees();
 
+        Task<IEnumerable<WeatherForecast>> GetWeather(string token);
+
+        Task<Result<LoginClient>> LoginClient(LoginModel login);
+
 
     }
 }

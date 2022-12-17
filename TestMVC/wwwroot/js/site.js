@@ -15,6 +15,11 @@
         promptsDiv: $("#promptsDiv"),
         //caseDetailsTabControl: $("#CaseDetailsTabstrip").data("kendoTabStrip")
         contacts: $("#contacts"),
+        addStreamWindow: $("#addStreamWindow"),
+        addStreamWindowContent: $("#addStreamWindow .modal-content"),
+        addLoginWindow: $("#addLoginWindow"),
+        addLoginWindowContent: $("#addLoginWindow .modal-content"),
+        ErrorMessage: $("#ErrorMessage"),
 
     },
 
@@ -31,9 +36,28 @@
         Cache: document.location.protocol + "//" + document.location.host + "/Home/UpdateCache",
         Json: document.location.protocol + "//" + document.location.host + "/Home/JSonPost",
         JsonStudent: document.location.protocol + "//" + document.location.host + "/Home/JSonStudent",
-        
+        AddStreamList: document.location.protocol + "//" + document.location.host + "/Home/StreamListDetails",
+        CheckLogin: document.location.protocol + "//" + document.location.host + "/Home/CheckLogin",
+        Login: document.location.protocol + "//" + document.location.host + "/Home/Login",
 
 
+    },
+
+    onCheckLogin: function () {
+
+        $.ajax({
+            type: 'GET',
+            cache: false,
+            async: true,
+            url: EmployeeManagement.url.CheckLogin,
+            success: function (result) {
+                if (result.success === true) {
+
+                    EmployeeManagement.displayLoginWindow();
+                }
+
+            }
+        });
     },
     promptSelect: function (SelectedLabId) {
         $.ajax({
@@ -303,6 +327,109 @@
 
                 },
                 error: function (e) {
+
+                }
+            });
+        });
+
+    },
+
+    displayStreamWindow: function (e) {
+
+
+        var intPcdID = e;
+        var FileUrl = EmployeeManagement.url.AddStreamList + "?PcdID=" + e;
+
+        EmployeeManagement.variable.addStreamWindowContent.load(FileUrl, function () {
+            EmployeeManagement.variable.addStreamWindow.modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false,
+                cache: false
+            });
+        });
+
+        EmployeeManagement.variable.addStreamWindow.on("hidden.bs.modal", function () {
+            EmployeeManagement.variable.addStreamWindow.find(".modal-content").html('');
+        });
+
+        $(EmployeeManagement.variable.addStreamWindow).off("submit");
+        $(EmployeeManagement.variable.addStreamWindow).on("submit", "#formCaseNoteDetails", function (e) {
+
+            e.preventDefault();
+
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+
+
+                    if (partialResult.success === true) {
+
+                        document.getElementById("btnCancelNote").click();
+                        document.getElementById("notemessage").click();
+
+                    }
+
+                },
+                error: function (e) {
+
+
+                }
+            });
+        });
+
+    },
+
+    displayLoginWindow: function () {
+
+        
+        var FileUrl = EmployeeManagement.url.Login
+        
+        EmployeeManagement.variable.addLoginWindowContent.load(FileUrl, function () {
+            EmployeeManagement.variable.addLoginWindow.modal({
+                show: true,
+                backdrop: 'static',
+                keyboard: false,
+                cache: false
+            });
+        });
+
+        EmployeeManagement.variable.addLoginWindow.on("hidden.bs.modal", function () {
+            EmployeeManagement.variable.addLoginWindow.find(".modal-content").html('');
+        });
+
+        $(EmployeeManagement.variable.addLoginWindow).off("submit");
+        $(EmployeeManagement.variable.addLoginWindow).on("submit", "#LoginModal", function (e) {
+
+            e.preventDefault();
+
+            var form = $(this);
+
+            $.ajax({
+                url: form.attr("action"),
+                method: form.attr("method"),
+                data: form.serialize(),
+                success: function (partialResult) {
+
+
+                    if (partialResult.success === true) {
+
+                        document.getElementById("btnCancelNote").click();
+
+
+                    }
+                    else {
+
+                        $('#ErrorMessage').text('User name and Password are incorrect')
+                    }
+
+                },
+                error: function (e) {
+
 
                 }
             });

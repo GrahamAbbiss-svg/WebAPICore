@@ -1,0 +1,342 @@
+﻿@model IEnumerable<BO.SuperDogs>
+@using GridMvc;
+
+@{
+
+    ViewData["Title"] = "Dogs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+<html>
+
+<head>
+
+    @*<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />*@
+
+    <style>
+    </style>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>jQuery UI Progressbar - Download Dialog</title>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="/resources/demos/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <script>
+
+        var id;
+
+        $(function () {
+
+            var progressTimer,
+                progressbar = $("#progressbar"),
+                progressLabel = $(".progress-label"),
+                dialogButtons = [{
+                    text: "Cancel Download",
+                    click: closeDownload
+                }],
+
+                dialog = $("#dialog").dialog({
+                    autoOpen: false,
+                    closeOnEscape: false,
+                    resizable: false,
+                    buttons: dialogButtons,
+
+                    open: function () {
+                        progressTimer = setTimeout(progress, 2000);
+
+                    },
+
+                   beforeClose: function () {
+                        downloadButton.button("option", {
+                            disabled: false,
+                            label: "Start Download"
+                        });
+
+                    }
+
+                }),
+
+                downloadButton = $("#downloadButton")
+
+                    .button()
+                    .on("click", function () {
+
+                        $(this).button("option", {
+                            disabled: true,
+                            label: "Downloading..."
+                        });
+
+                        dialog.dialog("open");
+
+                    });
+
+
+
+            progressbar.progressbar({
+
+                value: false,
+
+                change: function () {
+
+                    progressLabel.text("Current Progress: " + progressbar.progressbar("value") + "%");
+
+                },
+
+                complete: function () {
+
+                    downloadfile(id);
+
+                    progressLabel.text("Complete!");
+
+                    dialog.dialog("option", "buttons", [{
+
+                        text: "Close",
+
+                        click: closeDownload
+
+                    }]);
+
+                    $(".ui-dialog button").last().trigger("focus");
+
+                }
+
+            });
+
+
+
+            function progress() {
+
+                var val = progressbar.progressbar("value") || 0;
+                progressbar.progressbar("value", val + Math.floor(Math.random() * 6));
+
+                if (val <= 99) {
+
+                    progressTimer = setTimeout(progress, 50);
+                }
+            }
+
+
+
+            function closeDownload() {
+
+                clearTimeout(progressTimer);
+
+                dialog
+
+                    .dialog("option", "buttons", dialogButtons)
+
+                    .dialog("close");
+
+                progressbar.progressbar("value", false);
+
+                progressLabel
+
+                    .text("Starting download...");
+
+                downloadButton.trigger("focus");
+
+            }
+
+        });
+
+    </script>
+
+    <style>
+
+        #progressbar {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .ui-dialog-titlebar-close {
+            display: none;
+        }
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+
+    <h1>Dogs List</h1>
+
+    <hr />
+
+    <div style="width:900px;">
+
+        @Html.Grid(Model).Columns(columns =>
+
+   {
+
+   columns.Add(c => c.DogName).Titled("Dog Name").Width = "150px";
+   columns.Add(c => c.DogBreed).Titled("Breed").Filterable(true).Width = "450px";
+   columns.Add(c => c.DogAge).Titled("Age").Width = "150px";
+   columns.Add(c => c.DogOwner).Titled("Owner Name").Width = "450px";
+   columns.Add()
+    .Sanitized(false)
+    .Encoded(false)
+    .SetWidth(100)
+    .Titled("Details")
+    .RenderValueAs(model => (@Html.ActionLink("Find", "FindDog", "Home", new { dogName = model.DogName }, new { @class = "btn btn-default" })));
+   columns.Add()
+       .Sanitized(false)
+       .Encoded(false)
+       .SetWidth(30)
+        .Titled("Download")
+  .RenderValueAs(model => new string("<button onclick='SubmitCusGovData(" + model.DogAge + ")' class='btn btn-default'>Borrar</button>"));
+
+@*columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).RenderValueAs(c => @<div style="width:100px;"><img alt="Image" width="60" height="40" src="~/Content/dog.gif" )" /></div>);*@
+
+columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).RenderValueAs(model => @<div style="width:100px;"><img alt="Image" width="60" height="40" src="@Url.Content(String.Format("~/Content/{0}",model.DogGif))" )" /></div>);
+
+
+
+}
+
+
+
+).WithPaging(5).Sortable(true).Selectable(true)
+
+    </div>
+
+    @*<div>
+            <input type="button" name="btnValue" value="Add Note" onclick="HomeManagement.displayStreamWindow(1);return false" id="btnAddNote" class="ButtonTab" style="color:black;background-color:lightgray;margin-right:10px" />
+        </div>*@
+
+    <div>
+        <input type="button" name="btnValue" value="Direct Plan" onclick="LaunchApp();return false" id="btnAddNote" class="ButtonTab" style="color:black;background-color:lightgray;margin-right:10px" />
+    </div>
+
+    <div id="filedownload" class="invisible">
+        <iframe id="downloadIframe" allowtransparency="true"></iframe>
+    </div>
+
+    <div id="dialog" title="File Download">
+        <div class="progress-label">Starting download...</div>
+        <div id="progressbar"></div>
+    </div>
+
+    <button id="downloadButton" class="invisible">Start Download</button>
+
+</body>
+
+
+
+</html>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+
+        //AddPagination();
+
+    }
+
+
+
+      function downloadfile(nam) {
+        $('#downloadIframe').attr('src', '@Url.Action("Download","Home")' + '/' + nam);
+    }
+
+    function LaunchApp() {
+
+        var ws = new ActiveXObject("WScript.Shell");
+
+        try {
+
+             ws.Exec("C:\\Users\\graha\\AppData\\Local\\Postman\\Postman.exe");
+
+        } catch (e) {
+
+            console.log(e);
+
+        }
+
+    }
+
+    //$(document).ready(function () {
+
+    //    $('.dogbut').click(function () {
+
+    //        alert($(this).val());
+
+    //    });
+
+    //});
+
+
+
+    function AddPagination() {
+
+        $('#dogs-data-table').after('<div id="nav"></div>');
+
+        var rowsShown = 4;
+
+        var rowsTotal = $('#dogs-data-table tbody tr').length;
+
+        var numPages = rowsTotal / rowsShown;
+
+        for (i = 0; i < numPages; i++) {
+
+            var pageNum = i + 1;
+
+            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+
+        }
+
+        $('#dogs-data-table tbody tr').hide();
+
+        $('#dogs-data-table tbody tr').slice(0, rowsShown).show();
+
+        $('#nav a:first').addClass('active');
+
+        $('#nav a').bind('click', function () {
+
+
+
+            $('#nav a').removeClass('active');
+
+            $(this).addClass('active');
+
+            var currPage = $(this).attr('rel');
+
+            var startItem = currPage * rowsShown;
+
+            var endItem = startItem + rowsShown;
+
+            $('#dogs-data-table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+
+        });
+
+
+
+    }
+
+    function SubmitCusGovData(e) {
+        id = e;
+        $("#downloadButton").click()
+        //downloadfile(e);
+    }
+
+</script>

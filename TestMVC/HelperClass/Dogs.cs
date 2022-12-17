@@ -16,55 +16,57 @@ namespace TestMVC.HelperClass
 
             var firstDog = new SuperDogs
             {
-                BreedName = "Labrador",
+                DogBreed = "Labrador",
                 DogAge = 1,
                 DogName = "HACHIKO",
                 DogOwner = "SURAJ SAHOO",
+                DogGif="dog.gif"
 
             };
 
-            var secondDog = new SuperDogs
-            {
-                BreedName = "Labrador",
-                DogAge = 2,
-                DogName = "STEFFY",
-                DogOwner = "XYZ",
-            };
-            var thirdDog = new SuperDogs
-            {
-                BreedName = "Golden Retriever",
-                DogAge = 3,
-                DogName = "LOVELY",
-                DogOwner = "PQrS",
-            };
-            var forthDog = new SuperDogs
-            {
-                BreedName = "German Spitz",
-                DogAge = 5,
-                DogName = "CANDY",
-                DogOwner = "ABCD",
-            };
-            var fifthDog = new SuperDogs
-            {
-                BreedName = "German Sheperd",
-                DogAge = 10,
-                DogName = "CAPTAIN",
-                DogOwner = "Mota",
-            };
+            //var secondDog = new SuperDogs
+            //{
+            //    BreedName = "Labrador",
+            //    DogAge = 2,
+            //    DogName = "STEFFY",
+            //    DogOwner = "XYZ",
+            //};
+            //var thirdDog = new SuperDogs
+            //{
+            //    BreedName = "Golden Retriever",
+            //    DogAge = 3,
+            //    DogName = "LOVELY",
+            //    DogOwner = "PQrS",
+            //};
+            //var forthDog = new SuperDogs
+            //{
+            //    BreedName = "German Spitz",
+            //    DogAge = 5,
+            //    DogName = "CANDY",
+            //    DogOwner = "ABCD",
+            //};
+            //var fifthDog = new SuperDogs
+            //{
+            //    BreedName = "German Sheperd",
+            //    DogAge = 10,
+            //    DogName = "CAPTAIN",
+            //    DogOwner = "Mota",
+            //};
             var sixthDog = new SuperDogs
             {
-                BreedName = "British BullDog",
+                DogBreed = "British BullDog",
                 DogAge = 10,
                 DogName = "BILL",
                 DogOwner = "AUTA",
+                DogGif = "dog1.gif"
             };
             for (var i = 0; i < 10; i++)
             {
                 returnModel.Add(firstDog);
-                returnModel.Add(secondDog);
-                returnModel.Add(thirdDog);
-                returnModel.Add(forthDog);
-                returnModel.Add(fifthDog);
+                //returnModel.Add(secondDog);
+                //returnModel.Add(thirdDog);
+                //returnModel.Add(forthDog);
+                //returnModel.Add(fifthDog);
                 returnModel.Add(sixthDog);
             }
             return returnModel;

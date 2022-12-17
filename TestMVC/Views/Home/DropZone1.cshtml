@@ -1,0 +1,84 @@
+﻿
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div class="row">
+
+    <div class="col-md-9">
+        <div id="dropzone">
+            <form action="/Home/Upload" class="dropzone needsclick dz-clickable" id="uploader">
+                <div class="dz-message needsclick">
+                    Drop files here or click to upload.<br>
+                </div>
+            </form>
+        </div>
+
+        <div id="previewFiles"></div>
+        <div id="ts-employee">
+
+            <br />
+            <button type="button" class="btn btn-primary btn-md" onclick="DeleteFiles()">
+                Delete Files
+            </button>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+
+
+    <script>
+
+        Dropzone.autoDiscover = false;
+        var currentFile = null;
+
+        $(document).ready(function () {
+
+            try {
+
+                // ...
+            var myDropzone = new Dropzone("uploader", {
+
+                addRemoveLinks: true,
+                autoProcessQueue: false,
+                previewsContainer: "#previewFiles",
+                url: "#",
+                maxFiles: 1,
+
+                init: function () {
+
+                    this.on("addedfile", function (file) {
+
+                        if (currentFile) {
+                            this.removeFile(currentFile);
+                        }
+                        currentFile = file;
+                    });
+
+                   this.on("successmultiple", function (files, response) {
+                    });
+
+                }
+
+            });
+
+           } catch (e) {
+
+                console.log(e);
+
+            }
+
+        })
+
+        function DeleteFiles() {
+            Dropzone.forElement('#uploader').removeAllFiles(true)
+        }
+
+
+
+    </script>
+
+}

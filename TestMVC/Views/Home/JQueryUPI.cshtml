@@ -1,0 +1,332 @@
+﻿@model BO.clsGetDirectActivity
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    @*<link href="~/css/Test.css" rel="stylesheet" />*@
+
+    <style>
+        invisible {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
+</head>
+@using (Html.BeginForm("JQueryUI", "Home", FormMethod.Post, new { id = "JQueryUI" }))
+{
+    
+    <div id="addStreamWindow" class="modal fade outer">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    <div id="accordion">
+        <div class="group">
+            <h3>Section 1</h3>
+            <div>
+                <p>
+                    <a href="#" title="That&apos;s what this widget is">Tooltips</a> can be attached to any element. When you hover
+                    the element with your mouse, the title attribute is displayed in a little box next to the element, just like a native tooltip.
+                </p>
+                <p>
+                    But as it&apos;s not a native tooltip, it can be styled. Any themes built with
+                    <a href="http://jqueryui.com/themeroller/" title="ThemeRoller: jQuery UI&apos;s theme builder application">ThemeRoller</a>
+                    will also style tooltips accordingly.
+                </p>
+                <p>Tooltips are also useful for form elements, to show some additional information in the context of each field.</p>
+                <p><label for="age">Your age:</label><input id="age" title="We ask for your age only for statistical purposes."></p>
+                <p>Hover the field to see the tooltip.</p>
+            </div>
+        </div>
+        <div class="group">
+            <h3>Section 2</h3>
+            <div>
+                <p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. </p>
+            </div>
+        </div>
+        <div class="group">
+            <h3>Section 3</h3>
+            <div>
+                <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
+                <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                </ul>
+            </div>
+        </div>
+        <div class="group">
+            <h3>Section 4</h3>
+
+            <div>
+                <table>
+                    <tr>
+                        <td> @Html.Label("Code")</td>
+                        <td> @Html.TextBox("Code")</td>
+                    </tr>
+                    <tr>
+                        <td> @Html.Label("Employee")</td>
+                        <td> @Html.TextBox("Employee")</td>
+                    </tr>
+                </table>
+
+                <div id="ts-employee">
+                    <br />
+                    <button type="button" class="btn btn-primary btn-md" onclick="myEmployee()">
+                        Get Employee
+                    </button>
+                </div>
+
+                <div id="ts-note">
+                    <br />
+                    <button type="button" class="btn btn-primary btn-md" onclick="DisplayNote();return false">
+                        Note
+                    </button>
+                </div>
+                <br />
+                <div id="ts-result">
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div>
+        <p>Date: <input type="text" id="datepicker"></p>
+    </div>
+    <br />
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Nunc tincidunt</a></li>
+            <li><a href="#tabs-2">Proin dolor</a></li>
+            <li><a href="#tabs-3">Aenean lacinia</a></li>
+        </ul>
+        <div id="tabs-1">
+            <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+        </div>
+        <div id="tabs-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Customer, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*ViewBag.CityList is holding all the cities values*@
+
+                    @Html.DropDownListFor(model => model.Customer, new SelectList(Model.Customers, "Value", "Text"), new { style = "width: 250px;", @id = "Customers", onchange = "categoryChosenCus()" })
+                    @Html.ValidationMessageFor(model => model.Customer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Governance, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*@Html.DropDownListFor(model => model.Governance, ViewBag.GovernanceList as SelectList, new { @class = "form-control", @id = "Governance", onchange = "categoryChosenGov()" })*@
+                    @Html.DropDownListFor(model => model.Governance, new SelectList(Model.Governances, "Value", "Text"), new { style = "width: 250px;", @id = "Governance", onchange = "categoryChosenGov()" })
+                    @Html.ValidationMessageFor(model => model.Governance, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+        <div id="tabs-3">
+            <p>
+                <label for="spinner">Select a value:</label>
+                <input id="spinner" name="value">
+            </p>
+
+            <p>
+                <button id="disable">Toggle disable/enable</button>
+                <button id="destroy">Toggle widget</button>
+            </p>
+
+            <p>
+                <button id="getvalue">Get value</button>
+                <button id="setvalue">Set value to 5</button>
+            </p>
+            <div style="font-family:Arial">
+                @Html.ListBoxFor(m => m.citiesViewModel.SelectedCities, new SelectList(Model.citiesViewModel.Cities, "Value", "Text"), new { size = 5 })
+                <br />
+            </div>
+        </div>
+    </div>
+    <br />
+  
+    <div>   
+        <input type="submit" value="Submit Values" />
+    </div>
+
+
+
+}
+
+<div id="dialog" title="Basic dialog">
+    <p>This is an animated dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the &apos;x&apos; icon.</p>
+</div>
+<div>
+    <button id="opener" return="false">Open Dialog</button>  
+</div>
+
+
+<div id="note" title="Note">
+    <p>The Note has been saved</p>
+</div>
+
+<button id="notemessage" class="invisible">Note Message</button>
+
+<script type="text/javascript">
+
+
+
+    function myEmployee() {
+
+        var a = $("#Code").val();
+        var b = $("#Employee").val();
+
+        TSEmployeeButton(a, b)
+
+    }
+
+      function categoryChosenCus() {
+                                var listbox = document.getElementById("Customers");
+                                var selIndex = listbox.selectedIndex;
+                                var val = listbox.options[selIndex].value;
+                                var selText = listbox.options[selIndex].text;
+                                    $.getJSON('@Url.Action("GetDropdownList", "Home")' + "?value=" + val, function (result) {
+                                        
+                                    $("#Governance").html(""); // makes select null before filling process
+                                    var data = JSON.parse(result);
+                                      
+                                    for (var i = 0; i < data.length; i++) {
+
+                                        $("#Governance").append($("<option></option>")
+                                              .attr("value", data[i].Value)
+                                              .text(data[i].Text));
+                                    }
+
+                                    })
+
+
+                            }
+
+
+                            function categoryChosenGov() {
+                                var listbox = document.getElementById("Governance");
+                                var selIndex = listbox.selectedIndex;
+                                var val = listbox.options[selIndex].value;
+                                var selText = listbox.options[selIndex].text;
+
+    }
+
+
+   
+
+    function DisplayNote() {
+        var valPCDID;
+        valPCDID = 1;
+        //displaywindow(1);
+        
+        HomeManagement.displayStreamWindow(1);
+
+    }
+    $(function () {
+        $("#accordion")
+            .accordion({
+                header: "> div > h3",
+                collapsible: true
+            })
+            .sortable({
+                axis: "y",
+                handle: "h3",
+                stop: function (event, ui) {
+                    // IE doesn't register the blur when sorting
+                    // so trigger focusout handlers to remove .ui-state-focus
+                    ui.item.children("h3").triggerHandler("focusout");
+
+                    // Refresh accordion to handle new order
+                    $(this).accordion("refresh");
+                }
+            });
+    });
+    $(function () {
+        $("#datepicker").datepicker();
+    });
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+    $(function () {
+        $(document).tooltip();
+    });
+
+    $(function () {
+        $("#dialog").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 1000
+            },
+            hide: {
+                effect: "explode",
+                duration: 1000
+            }
+        });
+
+        $("#opener").on("click", function () {
+            $("#dialog").dialog("open");
+        });
+    });
+
+    $(function () {
+        $("#note").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 1000
+            },
+            hide: {
+                effect: "explode",
+                duration: 1000
+            }
+        });
+
+        $("#notemessage").on("click", function () {
+            $("#note").dialog("open");
+        });
+    });
+
+
+    $(function () {
+        var spinner = $("#spinner").spinner();
+
+        $("#disable").on("click", function () {
+            if (spinner.spinner("option", "disabled")) {
+                spinner.spinner("enable");
+            } else {
+                spinner.spinner("disable");
+            }
+        });
+        $("#destroy").on("click", function () {
+            if (spinner.spinner("instance")) {
+                spinner.spinner("destroy");
+            } else {
+                spinner.spinner();
+            }
+        });
+        $("#getvalue").on("click", function () {
+            alert(spinner.spinner("value"));
+        });
+        $("#setvalue").on("click", function () {
+            spinner.spinner("value", 5);
+        });
+
+        $("button").button();
+    });
+
+
+</script>

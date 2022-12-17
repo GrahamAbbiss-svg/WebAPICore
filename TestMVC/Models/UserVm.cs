@@ -18,6 +18,7 @@
         public bool LoginSucceeded { get; set; }
         public string SecurityMessage { get; set; }
         public int PasswordChanges { get; set; }
-        //public EPortalConfigurationVm Configuration { get; set; }
-    }
+        public int RoleId { get; set; }
+    //public EPortalConfigurationVm Configuration { get; set; }
+}
 

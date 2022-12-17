@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\JQueryUPI.cshtml" />
     <Content Remove="Views\Kendo\Events.cshtml" />
     <Content Remove="Views\Kendo\Grid.cshtml" />
     <Content Remove="Views\Kendo\Slider.cshtml" />
@@ -12,10 +13,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="dropzone" Version="4.3.0" />
+    <PackageReference Include="glyphicon" Version="1.0.1" />
     <PackageReference Include="GridMvcCore" Version="4.1.5" />
-    <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+    <PackageReference Include="jQuery" Version="3.6.0" />
+    <PackageReference Include="jQuery.UI.Combined" Version="1.13.1" />
     <PackageReference Include="jsTree" Version="3.1.1.2" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.1" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
@@ -26,5 +40,11 @@
   <ItemGroup>
     <Folder Include="Views\Kendo\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Home\JQueryUPI.cshtml" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4appscriptsjs_4app_1js_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

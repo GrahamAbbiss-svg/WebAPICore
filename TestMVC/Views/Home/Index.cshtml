@@ -2,7 +2,28 @@
     ViewData["Title"] = "Home Page";
 }
 
+<div id="ContentDiv" class="form-group">
+
+</div>
+<div id="addLoginWindow" class="modal fade outer">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        //HomeManagement.displayLoginWindow();
+        DisplayNote();
+    }
+
+    function DisplayNote() {
+        EmployeeManagement.onCheckLogin()
+    }
+</script>

@@ -1,0 +1,159 @@
+﻿body {
+    /*background-color: coral;*/
+    background-color: aqua;
+}
+
+.invisible {
+    display: none;
+    visibility: hidden;
+}
+.k-ddl {
+    width: 25%;
+}
+/*Case View Content*/
+.k-gridcase {
+    width: 25%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.k-grid td {
+    padding: 0.1em 0.1em
+}
+/*Case View Content*/
+
+/*Case List Content*/
+.k-gridcasecontent {
+    width: 90%;
+    background-color: powderblue;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.k-gridcasecontent {
+    width: 90%;
+    background-color: powderblue;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+/*Case List Content*/
+
+/*Case details Section*/
+.d-tablecasedetails {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.t-tablecasedetails {
+    border-collapse: collapse;
+    font-size: Small;
+    font-family: Verdana;
+    border-style: Solid;
+    border-width: 1px;
+}
+
+p.thick {
+    font-weight: bold;
+}
+
+.t-tdallleftbld {
+    border-style: Solid;
+    border-width: 1px;
+    text-align: "left";
+    font-weight: bold;
+}
+
+.t-tdallleft {
+    border-style: Solid;
+    border-width: 1px;
+    text-align: "left";
+}
+
+.t-tdallright {
+    border-style: Solid;
+    border-width: 1px;
+    text-align: "right"
+}
+
+.l-lablecasedetails {
+    text-decoration: underline;
+    font-weight: normal;
+    font-size: Small;
+    font-family: Verdana
+}
+
+.ButtonTab {
+    text-align: center;
+    Border-Style: solid;
+    border-width: 1px;
+    Height: 25px;
+    width: 125px;
+    min-width: 125px;
+}
+
+.k-tabcasecontent {
+    width: 90%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.invisible {
+    display: none;
+    visibility: hidden;
+}
+/*Case details Section*/
+
+/*FileUpload*/
+
+/*Notes section*/
+.textarea {
+    width: 400px;
+    height: 250px;
+    resize: both;
+    overflow: auto;
+}
+
+.mymodDiv {
+    background: red;
+}
+
+.k-label {
+    display: block;
+    width: 300px;
+}
+
+.k-div {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 500px;
+    height: 500px;
+}
+
+.k-div1 {
+    position: absolute;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 500px;
+    height: 500px;
+}
+
+.k-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -3,53 +3,85 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TestMVC</title>
+    @*<title>@ViewData["Title"] - TestMVC</title>*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/Table.css" rel="stylesheet" />
+    <link href="~/css/ContentsCSS.css" rel="stylesheet" />
+    <link href="~/css/Test.css" rel="stylesheet" />
+    <link href="~/css/newglyphicon.css" rel="stylesheet" />
+    <link href="~/css/listitems.css" rel="stylesheet" />
+    
+
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TestMVC</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>*@
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-send" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-flash" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetEmployee">Employee</a>
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-floppy-remove" asp-area="" asp-controller="Home" asp-action="GetEmployee">Employee</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Documents">Documents</a>
+                        @*<li class="nav-item">
+                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Documents">Documents</a>
+                        </li>*@
+                        @*<li class="nav-item menu-item"">
+                            <a class="glyphicon-credit-card" asp-area="" asp-controller="Home" asp-action="MyHtmlView">HTML View</a>
+                        </li>*@
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-credit-card" asp-area="" asp-controller="Home" asp-action="Slider">Slider</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MyHtmlView">HTML View</a>
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-star" asp-area="" asp-controller="Home" asp-action="JQueryUI">J Query</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Slider">Slider</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="JQuery">J Query</a>
-                        </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item menu-item"">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetContacts">Contacts</a>
-                        </li>
-                        <li class="nav-item">
+                        </li>*@
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="FileUpload">File Upload</a>
-                        </li>
-                        <li class="nav-item">
+                        </li>*@
+                        @*<li class="nav-item menu-item"">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateDropDown">New Drop Down</a>
+                        </li>*@
+                        <li class="nav-item menu-item">
+                            <a class="glyphicon-book" asp-area="" asp-controller="Home" asp-action="Dogs">Dogs</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dogs">Dogs</a>
+
+                        <li class="btn-group nav menu-item">
+                            <button type="button" class="btn navbar-btn" style="background-color: aqua">Drop Down</button>
+                            <button type="button" class="btn navbar-btn dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @*<li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CitiesList">List Item</a></li>*@
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MyHtmlView">Dynamic Data</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="FileUpload">File Upload</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateDropDown">Prompts</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetContacts">Contacts</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetWeather">Weather</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UserLogin">User Login</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="DropZone">Drop Zone</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AutoComplete">AutoComplete</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SideMenu">Side Menu</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SideBarMenu">Side Bar Menu</a></li>
+                            </ul>
                         </li>
 
                     </ul>
@@ -70,7 +102,16 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/js/Site8.js" asp-append-version="true"></script>
+    @*<script src="~/js/app.js"></script>*@
+    <script src="~/appScriptsJS/app.js"></script>
+
+    <script src="~/dropzone/dropzone.js"></script>
+    <script src="~/dropzone/dropzone-amd-module.js"></script>
+    <link href="~/dropzone/basic.css" rel="stylesheet" />
+    <link href="~/dropzone/dropzone.css" rel="stylesheet" />
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
