@@ -18,5 +18,8 @@ using System.Threading.Tasks;
     public static string CancelMsg { get { return "_CancelMsg"; } }
     public static string CancelTokenSource { get { return "_CancelTokenSource"; } }
     public static ArrayList DropDownArray { get; set; } = new ArrayList();
+    
+    public static string merge;
+    public static string merge1;
 }
 
